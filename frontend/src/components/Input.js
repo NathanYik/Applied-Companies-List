@@ -3,7 +3,7 @@ const Input = () => {
   let currDate = new Date();
   currDate = currDate.toString();
   currDate = currDate.split(" ").slice(1, 4).join(" ");
-  const [name, setName] = useState("*No name given*");
+  const [name, setName] = useState();
   const [applied, setApplied] = useState(currDate);
   const [replied, setReplied] = useState();
   const [status, setStatus] = useState("Accepted");

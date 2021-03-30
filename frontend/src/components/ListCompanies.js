@@ -2,6 +2,9 @@ import { useState, useEffect, Fragment } from "react";
 import EditCompany from "./EditCompany";
 const ListCompanies = () => {
   const [companies, setCompanies] = useState([]);
+  const [sortMode, setSortMode] = useState("id");
+  const [modalVisible, setModalVisible] = useState(-1);
+  const [sortDirection, setSortDirection] = useState(true);
   function displayDate(date) {
     if (date) {
       const year = date.substring(0, 4);
@@ -106,29 +109,160 @@ const ListCompanies = () => {
   // console.log(companies);
   return (
     <>
-      <h1>fsfs</h1>
+      <h1>Companies</h1>
       <tr>
-        <th></th>
-        <th>Company Name</th>
-        <th>Date Applied (current date by default)</th>
-        <th>Date Replied (if applicable)</th>
-        <th>Status</th>
-        <th>Notes</th>
+        <th>
+          Entry
+          <button
+            onClick={() => {
+              setSortMode("id");
+              setSortDirection(true);
+            }}
+          >
+            Up
+          </button>
+          <button
+            onClick={() => {
+              setSortMode("id");
+              setSortDirection(false);
+            }}
+          >
+            Down
+          </button>
+        </th>
+        <th>
+          Company Name
+          <button
+            onClick={() => {
+              setSortMode("name");
+              setSortDirection(true);
+            }}
+          >
+            Up
+          </button>
+          <button
+            onClick={() => {
+              setSortMode("name");
+              setSortDirection(false);
+            }}
+          >
+            Down
+          </button>
+        </th>
+        <th>
+          Date Applied (current date by default)
+          <button
+            onClick={() => {
+              setSortMode("applied");
+              setSortDirection(true);
+            }}
+          >
+            Up
+          </button>
+          <button
+            onClick={() => {
+              setSortMode("applied");
+              setSortDirection(false);
+            }}
+          >
+            Down
+          </button>
+        </th>
+        <th>
+          Date Replied (if applicable)
+          <button
+            onClick={() => {
+              setSortMode("replied");
+              setSortDirection(true);
+            }}
+          >
+            Up
+          </button>
+          <button
+            onClick={() => {
+              setSortMode("replied");
+              setSortDirection(false);
+            }}
+          >
+            Down
+          </button>
+        </th>
+        <th>
+          Status
+          <button
+            onClick={() => {
+              setSortMode("status");
+              setSortDirection(true);
+            }}
+          >
+            Up
+          </button>
+          <button
+            onClick={() => {
+              setSortMode("status");
+              setSortDirection(false);
+            }}
+          >
+            Down
+          </button>
+        </th>
+        <th>
+          Notes
+          <button
+            onClick={() => {
+              setSortMode("notes");
+              setSortDirection(true);
+            }}
+          >
+            Up
+          </button>
+          <button
+            onClick={() => {
+              setSortMode("notes");
+              setSortDirection(false);
+            }}
+          >
+            Down
+          </button>
+        </th>
       </tr>
-      {companies.map((company, index) => (
-        <tr key={company.id}>
-          <td>#{index + 1}</td>
-          <td>{company.name}</td>
-          <td>{displayDate(company.applied)}</td>
-          <td>{displayDate(company.replied)}</td>
-          <td>{company.status}</td>
-          <td>{company.notes}</td>
-          <td>
-            <EditCompany />
-            <button onClick={() => deleteCompany(company.id)}>Delete</button>
-          </td>
-        </tr>
-      ))}
+      {companies
+        .sort((a, b) => {
+          const first = a[sortMode] ? a[sortMode] : "zzzzzzz";
+          const second = b[sortMode] ? b[sortMode] : "zzzzzzz";
+          return first < second
+            ? sortDirection
+              ? -1
+              : 1
+            : sortDirection
+            ? 1
+            : -1;
+        })
+        .map((company, index) => (
+          <tr key={company.id}>
+            <td>#{index + 1}</td>
+            <td>{company.name ? company.name : "*No name given*"}</td>
+            <td>{displayDate(company.applied)}</td>
+            <td>{company.replied ? displayDate(company.replied) : "N/A"}</td>
+            <td>{company.status}</td>
+            <td>{company.notes}</td>
+            <td>
+              <button onClick={() => setModalVisible(index)}>Edit</button>
+              <button onClick={() => deleteCompany(company.id)}>Delete</button>
+              {modalVisible == index && (
+                <EditCompany
+                  eid={company.id}
+                  ename={company.name}
+                  eapplied={company.applied}
+                  ereplied={company.replied}
+                  estatus={company.status}
+                  enotes={company.notes}
+                  setModalVisible={setModalVisible}
+                />
+              )}
+            </td>
+          </tr>
+        ))}
     </>
   );
 };
