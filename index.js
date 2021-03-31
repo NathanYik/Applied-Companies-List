@@ -7,6 +7,9 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+}
 
 app.post("/companies", async (req, res) => {
   try {
@@ -67,6 +70,10 @@ app.delete("/companies/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile("frontend/build/index.html");
 });
 
 app.listen(port, () => {
