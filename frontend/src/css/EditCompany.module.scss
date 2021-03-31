@@ -13,3 +13,34 @@
   // transition: all 2s;
   color: white;
 }
+.buttons {
+  grid-column: span 2;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.input {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 55%;
+  background-color: #232b2b;
+  padding: 50px 25px;
+  padding-top: 0px;
+  border: 2px solid #7a7a7a;
+  border-radius: 3px;
+}
+.text {
+  grid-column: span 2;
+}
+.ok {
+  justify-self: right;
+  background-color: goldenrod;
+}
+.cancel {
+  justify-self: left;
+  background-color: #c71717;
+}
+.title {
+  grid-column: span 2;
+}

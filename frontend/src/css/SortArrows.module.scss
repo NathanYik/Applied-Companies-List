@@ -1,0 +1,11 @@
+.arrows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.arrow {
+  width: 10px;
+  height: 12px;
+}

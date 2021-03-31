@@ -36,44 +36,66 @@ const EditCompany = ({
   };
   return (
     <div className={styles.popup}>
-      <form>
-        <input
-          placeholder="Enter a company"
-          defaultValue={ename}
-          type="text"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="date"
-          defaultValue={eapplied}
-          onChange={(e) => setApplied(e.target.value)}
-        />
-        <input
-          type="date"
-          defaultValue={ereplied}
-          onChange={(e) => setReplied(e.target.value)}
-        />
-        <select
-          defaultValue={estatus}
-          name="status"
-          id="status"
-          onChange={(e) => setStatus(e.target.value)}
-        >
-          <option value="Accepted">Accepted</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Ghosted :(">Ghosted</option>
-          <option value="Pending...">Pending</option>
-        </select>
-
-        <input
-          placeholder="Notes, extras, etc."
-          type="text"
-          defaultValue={enotes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
+      <form className={styles.input}>
+        <h1 className={styles.title}>Edit Company</h1>
+        <div className={styles.inputfield}>
+          <label>Company Name</label>
+          <input
+            placeholder="Company Name"
+            type="text"
+            defaultValue={ename}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className={styles.inputfield}>
+          <label>Status</label>
+          <select
+            name="status"
+            id="status"
+            onChange={(e) => setStatus(e.target.value)}
+            defaultValue={estatus}
+          >
+            <option value="Pending...">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Ghosted">Ghosted</option>
+          </select>
+        </div>
+        <div className={styles.inputfield}>
+          <label>Date Applied (current date by default)</label>
+          <input
+            defaultValue={eapplied}
+            type="date"
+            onChange={(e) => setApplied(e.target.value)}
+          />
+        </div>
+        <div className={styles.inputfield}>
+          <label>Date Replied (if applicable)</label>
+          <input
+            defaultValue={ereplied}
+            type="date"
+            onChange={(e) => setReplied(e.target.value)}
+          />
+        </div>
+        <div className={styles.text}>
+          <label for="notes">Notes</label>
+          <textarea
+            defaultValue={enotes}
+            placeholder="Notes, comments, extras, etc."
+            name="notes"
+            id="notes"
+            cols="30"
+            rows="10"
+            onChange={(e) => setNotes(e.target.value)}
+          ></textarea>
+        </div>
+        <button className={styles.ok} onClick={() => onSubmit()}>
+          Change
+        </button>
+        <button className={styles.cancel} onClick={() => setModalVisible(-1)}>
+          Cancel
+        </button>
       </form>
-      <button onClick={() => onSubmit()}>Change</button>
-      <button onClick={() => setModalVisible(-1)}>Close</button>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "../css/Input.module.scss";
 const Input = () => {
   let currDate = new Date();
   currDate = currDate.toString();
@@ -6,7 +7,7 @@ const Input = () => {
   const [name, setName] = useState();
   const [applied, setApplied] = useState(currDate);
   const [replied, setReplied] = useState();
-  const [status, setStatus] = useState("Accepted");
+  const [status, setStatus] = useState("Pending...");
   const [notes, setNotes] = useState("");
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -25,42 +26,53 @@ const Input = () => {
     }
   };
   return (
-    <div>
-      <h1>My list of companies that I've applied to</h1>
-      <form onSubmit={onSubmit}>
-        <input
-          placeholder="Enter a company"
-          type="text"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="date"
-          value={applied}
-          onChange={(e) => setApplied(e.target.value)}
-        />
-        <input
-          type="date"
-          value={replied}
-          onChange={(e) => setReplied(e.target.value)}
-        />
-        <select
-          name="status"
-          id="status"
-          onChange={(e) => setStatus(e.target.value)}
-        >
-          <option value="Accepted">Accepted</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Ghosted :(">Ghosted</option>
-          <option value="Pending...">Pending</option>
-        </select>
-
-        <input
-          placeholder="Notes, extras, etc."
-          type="text"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
-        <button>Add</button>
+    <div className={styles.container}>
+      <h1>Welcome to my Job Hunting Records</h1>
+      <form onSubmit={onSubmit} className={styles.input}>
+        <div className={styles.inputfield}>
+          <label>Company Name</label>
+          <input
+            placeholder="Company Name"
+            type="text"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className={styles.inputfield}>
+          <label>Status</label>
+          <select
+            name="status"
+            id="status"
+            onChange={(e) => setStatus(e.target.value)}
+            defaultValue="Pending"
+          >
+            <option value="Pending...">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Ghosted">Ghosted</option>
+          </select>
+        </div>
+        <div className={styles.inputfield}>
+          <label>Date Applied (current date by default)</label>
+          <input type="date" onChange={(e) => setApplied(e.target.value)} />
+        </div>
+        <div className={styles.inputfield}>
+          <label>Date Replied (if applicable)</label>
+          <input type="date" onChange={(e) => setReplied(e.target.value)} />
+        </div>
+        <div className={styles.text}>
+          <label for="notes">Notes</label>
+          <textarea
+            placeholder="Notes, comments, extras, etc."
+            name="notes"
+            id="notes"
+            cols="30"
+            rows="10"
+            onChange={(e) => setNotes(e.target.value)}
+          ></textarea>
+        </div>
+        <div className={styles.submit}>
+          <button>Add</button>
+        </div>
       </form>
     </div>
   );

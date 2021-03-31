@@ -1,10 +1,46 @@
 import { useState, useEffect, Fragment } from "react";
 import EditCompany from "./EditCompany";
+import styles from "../css/ListCompanies.module.scss";
+import SortArrows from "./SortArrows";
+import { FaHeartBroken } from "react-icons/fa";
 const ListCompanies = () => {
   const [companies, setCompanies] = useState([]);
   const [sortMode, setSortMode] = useState("id");
   const [modalVisible, setModalVisible] = useState(-1);
   const [sortDirection, setSortDirection] = useState(true);
+  const [color, setColor] = useState();
+  function findReplied(replied) {
+    return replied ? (
+      <td>{displayDate(replied)}</td>
+    ) : (
+      <td className={styles.notfound}>N/A</td>
+    );
+  }
+  function findName(name) {
+    return name ? (
+      <td>{name}</td>
+    ) : (
+      <td className={styles.notfound}>No Name</td>
+    );
+  }
+  function findColor(status) {
+    switch (status) {
+      case "Accepted":
+        return <td className={styles.green}>{status}</td>;
+      case "Rejected":
+        return <td className={styles.red}>{status}</td>;
+      case "Pending...":
+        return <td className={styles.yellow}>{status}</td>;
+      case "Ghosted":
+        return (
+          <td>
+            <div className={styles.darkRed}>
+              {status} <FaHeartBroken />
+            </div>
+          </td>
+        );
+    }
+  }
   function displayDate(date) {
     if (date) {
       const year = date.substring(0, 4);
@@ -84,15 +120,15 @@ const ListCompanies = () => {
       console.log(err.message);
     }
   };
-  const editCompany = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:5000/companies/${id}`, {
-        method: "PUT",
-      });
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+  // const editCompany = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:5000/companies/${id}`, {
+  //       method: "PUT",
+  //     });
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
   const getCompanies = async () => {
     try {
       const response = await fetch("http://localhost:5000/companies");
@@ -110,159 +146,111 @@ const ListCompanies = () => {
   return (
     <>
       <h1>Companies</h1>
-      <tr>
-        <th>
-          Entry
-          <button
-            onClick={() => {
-              setSortMode("id");
-              setSortDirection(true);
-            }}
-          >
-            Up
-          </button>
-          <button
-            onClick={() => {
-              setSortMode("id");
-              setSortDirection(false);
-            }}
-          >
-            Down
-          </button>
-        </th>
-        <th>
-          Company Name
-          <button
-            onClick={() => {
-              setSortMode("name");
-              setSortDirection(true);
-            }}
-          >
-            Up
-          </button>
-          <button
-            onClick={() => {
-              setSortMode("name");
-              setSortDirection(false);
-            }}
-          >
-            Down
-          </button>
-        </th>
-        <th>
-          Date Applied (current date by default)
-          <button
-            onClick={() => {
-              setSortMode("applied");
-              setSortDirection(true);
-            }}
-          >
-            Up
-          </button>
-          <button
-            onClick={() => {
-              setSortMode("applied");
-              setSortDirection(false);
-            }}
-          >
-            Down
-          </button>
-        </th>
-        <th>
-          Date Replied (if applicable)
-          <button
-            onClick={() => {
-              setSortMode("replied");
-              setSortDirection(true);
-            }}
-          >
-            Up
-          </button>
-          <button
-            onClick={() => {
-              setSortMode("replied");
-              setSortDirection(false);
-            }}
-          >
-            Down
-          </button>
-        </th>
-        <th>
-          Status
-          <button
-            onClick={() => {
-              setSortMode("status");
-              setSortDirection(true);
-            }}
-          >
-            Up
-          </button>
-          <button
-            onClick={() => {
-              setSortMode("status");
-              setSortDirection(false);
-            }}
-          >
-            Down
-          </button>
-        </th>
-        <th>
-          Notes
-          <button
-            onClick={() => {
-              setSortMode("notes");
-              setSortDirection(true);
-            }}
-          >
-            Up
-          </button>
-          <button
-            onClick={() => {
-              setSortMode("notes");
-              setSortDirection(false);
-            }}
-          >
-            Down
-          </button>
-        </th>
-      </tr>
-      {companies
-        .sort((a, b) => {
-          const first = a[sortMode] ? a[sortMode] : "zzzzzzz";
-          const second = b[sortMode] ? b[sortMode] : "zzzzzzz";
-          return first < second
-            ? sortDirection
-              ? -1
-              : 1
-            : sortDirection
-            ? 1
-            : -1;
-        })
-        .map((company, index) => (
-          <tr key={company.id}>
-            <td>#{index + 1}</td>
-            <td>{company.name ? company.name : "*No name given*"}</td>
-            <td>{displayDate(company.applied)}</td>
-            <td>{company.replied ? displayDate(company.replied) : "N/A"}</td>
-            <td>{company.status}</td>
-            <td>{company.notes}</td>
-            <td>
-              <button onClick={() => setModalVisible(index)}>Edit</button>
-              <button onClick={() => deleteCompany(company.id)}>Delete</button>
-              {modalVisible == index && (
-                <EditCompany
-                  eid={company.id}
-                  ename={company.name}
-                  eapplied={company.applied}
-                  ereplied={company.replied}
-                  estatus={company.status}
-                  enotes={company.notes}
-                  setModalVisible={setModalVisible}
+      <div>
+        <table>
+          <tr>
+            <th>Entry</th>
+            <th>
+              <div className={styles.box}>
+                Company Name
+                <SortArrows
+                  setSortMode={setSortMode}
+                  setSortDirection={setSortDirection}
+                  sortMode="name"
                 />
-              )}
-            </td>
+              </div>
+            </th>
+            <th>
+              <div className={styles.box}>
+                Date Applied
+                <SortArrows
+                  setSortMode={setSortMode}
+                  setSortDirection={setSortDirection}
+                  sortMode="applied"
+                />
+              </div>
+            </th>
+            <th>
+              <div className={styles.box}>
+                Date Replied
+                <SortArrows
+                  setSortMode={setSortMode}
+                  setSortDirection={setSortDirection}
+                  sortMode="replied"
+                />
+              </div>
+            </th>
+            <th>
+              <div className={styles.box}>
+                Status
+                <SortArrows
+                  setSortMode={setSortMode}
+                  setSortDirection={setSortDirection}
+                  sortMode="status"
+                />
+              </div>
+            </th>
+            <th>
+              <div className={styles.box}>
+                Notes
+                <SortArrows
+                  setSortMode={setSortMode}
+                  setSortDirection={setSortDirection}
+                  sortMode="notes"
+                />
+              </div>
+            </th>
+            <th></th>
           </tr>
-        ))}
+          {companies
+            .sort((a, b) => {
+              const first = a[sortMode] ? a[sortMode] : "zzzzzzz";
+              const second = b[sortMode] ? b[sortMode] : "zzzzzzz";
+              return first < second
+                ? sortDirection
+                  ? -1
+                  : 1
+                : sortDirection
+                ? 1
+                : -1;
+            })
+            .map((company, index) => (
+              <tr key={company.id}>
+                <td>{index + 1}</td>
+                {findName(company.name)}
+                <td>{displayDate(company.applied)}</td>
+                {findReplied(company.replied)}
+                {findColor(company.status)}
+                <td>{company.notes}</td>
+                <td>
+                  <button
+                    className={styles.ok}
+                    onClick={() => setModalVisible(index)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={styles.cancel}
+                    onClick={() => deleteCompany(company.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+                {modalVisible == index && (
+                  <EditCompany
+                    eid={company.id}
+                    ename={company.name}
+                    eapplied={company.applied}
+                    ereplied={company.replied}
+                    estatus={company.status}
+                    enotes={company.notes}
+                    setModalVisible={setModalVisible}
+                  />
+                )}
+              </tr>
+            ))}
+        </table>
+      </div>
     </>
   );
 };
