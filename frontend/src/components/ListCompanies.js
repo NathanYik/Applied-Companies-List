@@ -112,7 +112,7 @@ const ListCompanies = () => {
   }
   const deleteCompany = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/companies/${id}`, {
+      const response = await fetch(`/companies/${id}`, {
         method: "DELETE",
       });
       getCompanies();
@@ -131,7 +131,7 @@ const ListCompanies = () => {
   // };
   const getCompanies = async () => {
     try {
-      const response = await fetch("http://localhost:5000/companies");
+      const response = await fetch("/companies");
       const jsonData = await response.json();
       setCompanies(jsonData);
     } catch (err) {

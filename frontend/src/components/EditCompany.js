@@ -23,7 +23,7 @@ const EditCompany = ({
     const body = { name, applied, replied, status, notes };
     console.log(body);
     try {
-      const response = await fetch(`http://localhost:5000/companies/${eid}`, {
+      const response = await fetch(`companies/${eid}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

@@ -14,7 +14,7 @@ const Input = () => {
     const body = { name, applied, replied, status, notes };
     console.log(body);
     try {
-      const response = await fetch("http://localhost:5000/companies", {
+      const response = await fetch("/companies", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
